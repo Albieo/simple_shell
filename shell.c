@@ -8,32 +8,37 @@
 int main(void)
 {
 	char command[MAX_COMMAND_LENGTH];
+	ssize_t num_chars_read;
+	pid_t pid;
+	int status;
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "#cisfun$ ", 13);
+		write(STDOUT_FILENO, "SimpleShell> ", 13);
 
-		ssize_t num_chars_read = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
-		pid_t pid = fork();
-
+		num_chars_read = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 		if (num_chars_read == -1)
-        	break;
+			break;
 
 		command[num_chars_read - 1] = '\0';
+
+		pid = fork();
 
 		if (pid < 0)
 			break;
 
 		else if (pid == 0)
 		{
-    		char *argv[] = {command, NULL};
+			char **argv = (char **)malloc(2 * sizeof(char *));
+			argv[0] = command;
+			argv[1] = NULL;
 			execve(command, argv, NULL);
 
+			free(argv);
 			_exit(EXIT_FAILURE);
 		}
 		else
 		{
-			int status;
 			waitpid(pid, &status, 0);
 		}
 	}
