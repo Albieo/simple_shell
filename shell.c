@@ -11,7 +11,7 @@ int main(void)
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "SimpleShell> ", 13);
+		write(STDOUT_FILENO, "#cisfun$ ", 13);
 
 		ssize_t num_chars_read = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 		pid_t pid = fork();
