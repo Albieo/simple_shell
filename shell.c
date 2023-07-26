@@ -1,68 +1,182 @@
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /**
- * hsh_loop - main shell loop
+ * _putchar - writes the character c to stdout
+ * @c: The character to print
+ *
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
  */
-void hsh_loop(void)
+int _putchar(char c)
 {
-	ssize_t r;
-	info_t info = {0};
-	pid_t child_pid;
-
-	while (1)
-	{
-		if (isatty(STDIN_FILENO))
-			_puts(PROMPT);
-
-		r = read(STDIN_FILENO, info.cmd_buf, BUF_SIZE);
-		if (r == -1)
-		{
-			perror("read");
-			continue;
-		}
-		else if (r == 0)
-		{
-			if (isatty(STDIN_FILENO))
-				_putchar('\n');
-			break;
-		}
-
-		info.cmd_buf[r] = '\0';
-		if (info.cmd_buf[r - 1] == '\n')
-			info.cmd_buf[r - 1] = '\0';
-
-		if (access(info.cmd_buf, X_OK) == 0)
-		{
-			child_pid = fork();
-			if (child_pid == -1)
-			{
-				perror("fork");
-			}
-			else if (child_pid == 0)
-			{
-				execl(info.cmd_buf, info.cmd_buf, NULL);
-				perror("execl");
-				_exit(EXIT_FAILURE);
-			}
-			else
-			{
-				wait(&info.status);
-			}
-		}
-		else
-		{
-			perror("./shell");
-		}
-	}
+    return write(1, &c, 1);
 }
 
 /**
- * main - main program
+ * _puts - writes the string to stdout
+ * @str: The string to print
+ *
+ * Return: index of string.
+ */
+int _puts(char *str)
+{
+    int i = 0;
+    while (str[i] != '\0')
+    {
+        _putchar(str[i]);
+        i++;
+    }
+    return (i);
+}
+
+/**
+ * main - shell program
  * 
- * Return: EXIT_SUCCESS
+ * Return: 0 (Success)
 */
 int main(void)
 {
-	hsh_loop();
-	return (EXIT_SUCCESS);
+    char *buff = NULL;
+    size_t buff_size = 0;
+    ssize_t bytes;
+
+    while (1)
+    {
+        _puts(PROMPT);
+
+        bytes = getline(&buff, &buff_size, stdin);
+        if (bytes == -1)
+        {
+            _putchar('\n');
+            perror("Error (getline)");
+            free(buff);
+            exit(EXIT_FAILURE);
+        }
+
+        if (buff[bytes - 1] == '\n')
+            buff[bytes - 1] = '\0';
+
+        _execute(buff, NULL);
+    }
+
+    free(buff);
+    return (0);
+}
+
+/**
+ * _execute - function for executing the specified
+ * command (arguments) in the shell
+ * 
+ * @arguments: A pointer to a character array (C-string) that
+ * holds the command to be executed.
+ * @envp: A pointer to a null-terminated array of
+ * character pointers reps to execute
+*/
+void _execute(char *arguments, char **envp)
+{
+    pid_t wpid;
+
+    if (!check_file_status(arguments))
+    {
+        _puts("./shell: ");
+        perror(NULL);
+        return;
+    }
+
+    wpid = fork();
+    if (wpid == -1)
+    {
+        perror("Error (fork)");
+        exit(EXIT_FAILURE);
+    }
+
+    if (wpid == 0)
+    {
+        char **argv = split_string(arguments, " ");
+        execve(argv[0], argv, envp);
+        perror("Error (execve)");
+        free_string_array(argv);
+        exit(EXIT_FAILURE);
+    }
+
+    wait(NULL);
+}
+
+/**
+ * check_file_status - checks if the given file or command is executable.
+ * @pathname: string representing the path to a file or a command name.
+ * 
+ * Return: true (Success), false (Otherwise)
+*/
+bool check_file_status(char *pathname)
+{
+    return access(pathname, X_OK) == 0;
+}
+
+/**
+ * split_string - It tokenizes the input string str into individual
+ * substrings 
+ * @str: pointer to the input string that needs to be split.
+ * @delimiter: pointer to a constant string (character array)
+ * that specifies the delimiter used to split the input string.
+ * 
+ * Return: pointer to a dynamically allocated array of strings
+*/
+char **split_string(char *str, const char *delimiter)
+{
+    char **tokens = NULL;
+    char *token;
+    int size = 0;
+
+    token = strtok(str, delimiter);
+
+    while (token != NULL)
+    {
+        tokens = realloc(tokens, sizeof(char *) * (size + 1));
+        if (!tokens)
+        {
+            _putchar('\n');
+            perror("Error (realloc)");
+            exit(EXIT_FAILURE);
+        }
+
+        tokens[size++] = strdup(token);
+        token = strtok(NULL, delimiter);
+    }
+
+    tokens = realloc(tokens, sizeof(char *) * (size + 1));
+    if (!tokens)
+    {
+        perror("Error (realloc)");
+        exit(EXIT_FAILURE);
+    }
+    tokens[size] = NULL;
+
+    return (tokens);
+}
+
+/**
+ * free_string_array - function is responsible for freeing
+ * the memory allocated for an array of strings
+ * @arr: A pointer to an array of strings
+*/
+void free_string_array(char **arr)
+{
+    int i;
+
+    if (arr == NULL)
+        return;
+
+    for (i = 0; arr[i] != NULL; i++)
+    {
+        free(arr[i]);
+    }
+
+    free(arr);
 }
