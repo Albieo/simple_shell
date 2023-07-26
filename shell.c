@@ -23,6 +23,19 @@ int main(void)
 	int status;
 	int arg_count;
 	pid_t pid;
+	
+	setenv("USER", "username", 1);
+	setenv("LANGUAGE", "en_US", 1);
+	setenv("SESSION", "ubuntu", 1);
+	setenv("COMPIZ_CONFIG_PROFILE", "ubuntu", 1);
+	setenv("SHLVL", "1", 1);
+	setenv("HOME", "/home/username", 1);
+	setenv("C_IS", "FUN_ :)", 1);
+	setenv("DESKTOP_SESSION", "ubuntu", 1);
+	setenv("LOGNAME", "username", 1);
+	setenv("TERM", "xterm-256color", 1);
+	setenv("PATH", "/usr/local/bin:/usr/bin:/bin", 1);
+	setenv("DISPLAY", ":0", 1);
 
 	while (1)
 	{
