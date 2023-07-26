@@ -10,6 +10,11 @@
 
 #define MAX_COMMAND_LENGTH 1024
 
+/**
+ * main - shell program
+ *
+ * Return: 0 (Success)
+ */
 int main(void)
 {
 	char command[MAX_COMMAND_LENGTH];
