@@ -51,11 +51,10 @@ void hsh_loop(void)
 		}
 		else
 		{
-			perror("Command not found");
+			perror("./shell");
 		}
 	}
 }
-
 
 /**
  * main - main program

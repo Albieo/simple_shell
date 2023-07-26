@@ -11,7 +11,7 @@
 #define BUF_SIZE 1024
 #define BUF_FLUSH -1
 
-#define PROMPT "$ "
+#define PROMPT "#cisfun$ "
 
 /**
  * struct info - parameters and return value
