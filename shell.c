@@ -45,9 +45,13 @@ int main(void)
     char *buff = NULL;
     size_t buff_size = 0;
     ssize_t bytes;
+	bool _pipe = false;
 
-    while (1)
+    while (1 && !_pipe)
     {
+		if (isatty(STDIN_FILENO) == 0)
+			_pipe = true;
+
         _puts(PROMPT);
 
         bytes = getline(&buff, &buff_size, stdin);
@@ -81,6 +85,7 @@ int main(void)
 void _execute(char *arguments, char **envp)
 {
     pid_t wpid;
+	char **argv;
 
     if (!check_file_status(arguments))
     {
@@ -98,15 +103,25 @@ void _execute(char *arguments, char **envp)
 
     if (wpid == 0)
     {
-        char **argv = split_string(arguments, " ");
+        if (arguments[strlen(arguments) - 1] == '\n')
+            arguments[strlen(arguments) - 1] = '\0';
+
+        argv = split_string(arguments, " ");
         execve(argv[0], argv, envp);
         perror("Error (execve)");
         free_string_array(argv);
         exit(EXIT_FAILURE);
     }
+    else
+    {
+        wait(NULL);
+    }
 
-    wait(NULL);
+    exit(0);
 }
+
+
+
 
 /**
  * check_file_status - checks if the given file or command is executable.
