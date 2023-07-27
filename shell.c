@@ -15,7 +15,7 @@
  */
 int _putchar(char c)
 {
-	return write(1, &c, 1);
+	return (write(1, &c, 1));
 }
 
 /**
@@ -27,6 +27,7 @@ int _putchar(char c)
 int _puts(char *str)
 {
 	int i = 0;
+
 	while (str[i] != '\0')
 	{
 		_putchar(str[i]);
@@ -37,7 +38,7 @@ int _puts(char *str)
 
 /**
  * main - shell program
- * 
+ *
  * Return: 0 (Success)
 */
 int main(void)
@@ -76,7 +77,7 @@ int main(void)
 /**
  * _execute - function for executing the specified
  * command (arguments) in the shell
- * 
+ *
  * @arguments: A pointer to a character array (C-string) that
  * holds the command to be executed.
  * @envp: A pointer to a null-terminated array of
@@ -123,7 +124,7 @@ void _execute(char *arguments, char **envp)
 /**
  * check_file_status - checks if the given file or command is executable.
  * @pathname: string representing the path to a file or a command name.
- * 
+ *
  * Return: true (Success), false (Otherwise)
 */
 bool check_file_status(char *pathname)
@@ -137,7 +138,7 @@ bool check_file_status(char *pathname)
  * @str: pointer to the input string that needs to be split.
  * @delimiter: pointer to a constant string (character array)
  * that specifies the delimiter used to split the input string.
- * 
+ *
  * Return: pointer to a dynamically allocated array of strings
 */
 char **split_string(char *str, const char *delimiter)
