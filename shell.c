@@ -30,6 +30,12 @@ void execute_command(char* command)
 		return;
 	}
 
+	if (strcmp(args[0], "exit") == 0)
+	{
+		builtin_exit();
+		return; 
+	}
+	
 	pid = fork();
 
 	if (pid < 0)
