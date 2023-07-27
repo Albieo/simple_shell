@@ -12,12 +12,21 @@ void display_prompt()
 
 void execute_command(char* command)
 {
-    char* trimmed_command = strtok(command, " \t");
+    char* args[MAX_ARGS];
+    int arg_index = 0;
     pid_t pid;
-    char **args;
     int status;
+    char* token = strtok(command, " \t");
 
-    if (trimmed_command == NULL || _strlen(trimmed_command) == 0) {
+    while (token != NULL && arg_index < MAX_ARGS - 1) 
+    {
+        args[arg_index++] = token;
+        token = strtok(NULL, " \t");
+    }
+    args[arg_index] = NULL;
+
+    if (arg_index == 0) 
+    {
         return;
     }
 
@@ -31,21 +40,9 @@ void execute_command(char* command)
     }
     else if (pid == 0)
     {
-        args = (char **)malloc(2 * sizeof(char *));
-        if (args == NULL)
-        {
-            perror("Malloc error");
-            _exit(EXIT_FAILURE);
-        }
-
-        args[0] = _strdup(trimmed_command);
-        args[1] = NULL;
-
-        execve(trimmed_command, args, NULL);
+        execvp(args[0], args);
         _puts("Execve error");
         _putchar('\n');
-        free(args[0]);
-        free(args);
         _exit(EXIT_FAILURE);
     }
     else

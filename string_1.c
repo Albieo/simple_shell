@@ -30,26 +30,24 @@ char *_strcpy(char *dest, char *src)
  */
 char *_strdup(const char *str)
 {
-	int length = 0;
+	int len = 0;
 	char *ret;
 
 	if (str == NULL)
 		return (NULL);
 	while (*str++)
-		length++;
-	ret = malloc(sizeof(char) * (length + 1));
+		len++;
+	ret = malloc(sizeof(char) * (len + 1));
 	if (!ret)
 		return (NULL);
-	for (length++; length--;)
-		ret[length] = *--str;
+	for (len++; len--;)
+		ret[len] = *--str;
 	return (ret);
 }
 
 /**
  * _puts - prints an input string
  * @str: the string to be printed
- *
- * Return: Nothing
  */
 void _puts(char *str)
 {

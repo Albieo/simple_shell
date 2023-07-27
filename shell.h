@@ -3,6 +3,7 @@
 
 #define WRITE_BUF_SIZE 1024
 #define BUF_FLUSH '\0'
+#define MAX_ARGS 64
 
 #include <stdio.h>
 #include <stdlib.h>
