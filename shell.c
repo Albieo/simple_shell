@@ -35,7 +35,7 @@ void execute_command(char* command)
 		builtin_exit();
 		return; 
 	}
-	
+
 	pid = fork();
 
 	if (pid < 0)
@@ -57,11 +57,14 @@ void execute_command(char* command)
 	}
 }
 
-int main() 
+int main(int ac, char **av, char **env)
 {
 	char* line = NULL;
 	size_t line_buf_size = 0;
 	ssize_t line_size;
+	(void)ac;
+    	(void)av;
+    	(void)env;
 
 	while (1) 
 	{

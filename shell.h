@@ -25,4 +25,4 @@ void display_prompt();
 void execute_command(char* command);
 void builtin_exit(void);
 
-#endif /* SHELL_H */
+#endif
