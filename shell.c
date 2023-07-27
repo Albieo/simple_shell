@@ -1,6 +1,9 @@
 #include "shell.h"
 
-void display_prompt()
+/**
+ * display_prompt - shows the prompt in terminal
+*/
+void display_prompt(void)
 {
 	char *prompt = "$ ";
 	if (isatty(STDIN_FILENO))
@@ -10,6 +13,9 @@ void display_prompt()
 	}
 }
 
+/**
+ * execute_command - xecuting the specified command in the shell.
+*/
 void execute_command(char* command)
 {
 	char* args[MAX_ARGS];
@@ -18,22 +24,22 @@ void execute_command(char* command)
 	int status;
 	char* token = strtok(command, " \t");
 
-	while (token != NULL && arg_index < MAX_ARGS - 1) 
+	while (token != NULL && arg_index < MAX_ARGS - 1)
 	{
 		args[arg_index++] = token;
 		token = strtok(NULL, " \t");
 	}
 	args[arg_index] = NULL;
 
-	if (arg_index == 0) 
+	if (arg_index == 0)
 	{
 		return;
 	}
 
-	if (strcmp(args[0], "exit") == 0)
+	if (_strcmp(args[0], "exit") == 0)
 	{
 		builtin_exit();
-		return; 
+		return;
 	}
 
 	pid = fork();
@@ -55,30 +61,4 @@ void execute_command(char* command)
 	{
 		waitpid(pid, &status, 0);
 	}
-}
-
-int main(int ac, char **av, char **env)
-{
-	char* line = NULL;
-	size_t line_buf_size = 0;
-	ssize_t line_size;
-	(void)ac;
-    	(void)av;
-    	(void)env;
-
-	while (1) 
-	{
-		display_prompt();
-
-		line_size = getline(&line, &line_buf_size, stdin);
-		if (line_size == -1)
-			break;
-
-		line[line_size - 1] = '\0';
-
-		execute_command(line);
-	}
-
-	free(line);
-	return (0);
 }

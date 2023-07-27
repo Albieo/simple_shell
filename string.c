@@ -8,14 +8,15 @@
  */
 int _strlen(char *s)
 {
-	int i = 0;
+	int longi = 0;
 
-	if (!s)
-		return (0);
+	while (*s != '\0')
+	{
+		longi++;
+		s++;
+	}
 
-	while (*s++)
-		i++;
-	return (i);
+	return (longi);
 }
 
 /**
@@ -27,17 +28,18 @@ int _strlen(char *s)
  */
 int _strcmp(char *s1, char *s2)
 {
-	while (*s1 && *s2)
+	int i;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
 	{
-		if (*s1 != *s2)
-			return (*s1 - *s2);
-		s1++;
-		s2++;
+		if (s1[i] != s2[i])
+		{
+			return (s1[i] - s2[i]);
+		}
+	i++;
 	}
-	if (*s1 == *s2)
-		return (0);
-	else
-		return (*s1 < *s2 ? -1 : 1);
+	return (0);
 }
 
 /**
@@ -47,7 +49,7 @@ int _strcmp(char *s1, char *s2)
  *
  * Return: address of next char of haystack or NULL
  */
-char *starts_with(const char *haystack, const char *needle)
+char *starts_with(char *haystack, char *needle)
 {
 	while (*needle)
 		if (*needle++ != *haystack++)
@@ -64,12 +66,22 @@ char *starts_with(const char *haystack, const char *needle)
  */
 char *_strcat(char *dest, char *src)
 {
-	char *ret = dest;
+	int i;
+	int j;
 
-	while (*dest)
-		dest++;
-	while (*src)
-		*dest++ = *src++;
-	*dest = *src;
-	return (ret);
+	i = 0;
+	while (dest[i] != '\0')
+	{
+		i++;
+	}
+	j = 0;
+	while (src[j] != '\0')
+	{
+		dest[i] = src[j];
+		i++;
+		j++;
+	}
+
+	dest[i] = '\0';
+	return (dest);
 }
