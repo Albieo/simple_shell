@@ -6,6 +6,7 @@
 void display_prompt(void)
 {
 	char *prompt = "$ ";
+
 	if (isatty(STDIN_FILENO))
 	{
 		write(STDOUT_FILENO, prompt, 2);
@@ -15,14 +16,15 @@ void display_prompt(void)
 
 /**
  * execute_command - xecuting the specified command in the shell.
+ * @command: pointer to command passed.
 */
-void execute_command(char* command)
+void execute_command(char *command)
 {
-	char* args[MAX_ARGS];
+	char *args[MAX_ARGS];
 	int arg_index = 0;
 	pid_t pid;
 	int status;
-	char* token = strtok(command, " \t");
+	char *token = strtok(command, " \t");
 
 	while (token != NULL && arg_index < MAX_ARGS - 1)
 	{
@@ -32,9 +34,7 @@ void execute_command(char* command)
 	args[arg_index] = NULL;
 
 	if (arg_index == 0)
-	{
 		return;
-	}
 
 	if (_strcmp(args[0], "exit") == 0)
 	{
@@ -58,7 +58,6 @@ void execute_command(char* command)
 		_exit(EXIT_FAILURE);
 	}
 	else
-	{
 		waitpid(pid, &status, 0);
-	}
 }
+

@@ -2,19 +2,22 @@
 
 /**
  * main - prints the environment
- * 
+ * @ac: argument count.
+ * @av: argument vector.
+ * @env: environment pointer.
+ *
  * Return: 0 (Success)
 */
 int main(int ac, char **av, char **env)
 {
-	char* line = NULL;
+	char *line = NULL;
 	size_t line_buf_size = 0;
 	ssize_t line_size;
 	(void)ac;
-    	(void)av;
-    	(void)env;
+	(void)av;
+	(void)env;
 
-	while (1) 
+	while (1)
 	{
 		display_prompt();
 
@@ -30,3 +33,4 @@ int main(int ac, char **av, char **env)
 	free(line);
 	return (0);
 }
+
