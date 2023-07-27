@@ -21,8 +21,8 @@ char *_strdup(char *str);
 void _puts(char *str);
 int _putchar(char c);
 
-void display_prompt();
-void execute_command(char* command);
+void display_prompt(void);
+void execute_command(char *command);
 void builtin_exit(void);
 
 #endif
