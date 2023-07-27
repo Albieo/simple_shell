@@ -1,17 +1,26 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#include <stdbool.h>
-#include <errno.h>
+#define WRITE_BUF_SIZE 1024
+#define BUF_FLUSH '\0'
 
-#define BUF_SIZE 1024
-#define PROMPT "$ "
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-bool check_file_status(char *pathname);
-void _execute(char *arguments, char **envp);
-char **split_string(char *str, const char *delimiter);
-void free_string_array(char **arr);
+int _strlen(char *s);
+int _strcmp(char *s1, char *s2);
+char *starts_with(const char *haystack, const char *needle);
+char *_strcat(char *dest, char *src);
+char *_strcpy(char *dest, char *src);
+char *_strdup(const char *str);
+void _puts(char *str);
 int _putchar(char c);
-int _puts(char *str);
+
+void display_prompt();
+void execute_command(char* command);
 
 #endif /* SHELL_H */
