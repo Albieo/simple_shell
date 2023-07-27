@@ -15,7 +15,7 @@
  */
 int _putchar(char c)
 {
-    return write(1, &c, 1);
+	return write(1, &c, 1);
 }
 
 /**
@@ -26,13 +26,13 @@ int _putchar(char c)
  */
 int _puts(char *str)
 {
-    int i = 0;
-    while (str[i] != '\0')
-    {
-        _putchar(str[i]);
-        i++;
-    }
-    return (i);
+	int i = 0;
+	while (str[i] != '\0')
+	{
+		_putchar(str[i]);
+		i++;
+	}
+	return (i);
 }
 
 /**
@@ -42,35 +42,35 @@ int _puts(char *str)
 */
 int main(void)
 {
-    char *buff = NULL;
-    size_t buff_size = 0;
-    ssize_t bytes;
+	char *buff = NULL;
+	size_t buff_size = 0;
+	ssize_t bytes;
 	bool _pipe = false;
 
-    while (1 && !_pipe)
-    {
+	while (1 && !_pipe)
+	{
 		if (isatty(STDIN_FILENO) == 0)
 			_pipe = true;
 
-        _puts(PROMPT);
+		_puts(PROMPT);
 
-        bytes = getline(&buff, &buff_size, stdin);
-        if (bytes == -1)
-        {
-            _putchar('\n');
-            perror("Error (getline)");
-            free(buff);
-            exit(EXIT_FAILURE);
-        }
+		bytes = getline(&buff, &buff_size, stdin);
+		if (bytes == -1)
+		{
+			_putchar('\n');
+			perror("Error (getline)");
+			free(buff);
+			exit(EXIT_FAILURE);
+		}
 
-        if (buff[bytes - 1] == '\n')
-            buff[bytes - 1] = '\0';
+		if (buff[bytes - 1] == '\n')
+			buff[bytes - 1] = '\0';
 
-        _execute(buff, NULL);
-    }
+		_execute(buff, NULL);
+	}
 
-    free(buff);
-    return (0);
+	free(buff);
+	return (0);
 }
 
 /**
@@ -84,44 +84,41 @@ int main(void)
 */
 void _execute(char *arguments, char **envp)
 {
-    pid_t wpid;
+	pid_t wpid;
 	char **argv;
 
-    if (!check_file_status(arguments))
-    {
-        _puts("./shell: ");
-        perror(NULL);
-        return;
-    }
+	if (!check_file_status(arguments))
+	{
+		_puts("./shell: ");
+		perror(NULL);
+		return;
+	}
 
-    wpid = fork();
-    if (wpid == -1)
-    {
-        perror("Error (fork)");
-        exit(EXIT_FAILURE);
-    }
+	wpid = fork();
+	if (wpid == -1)
+	{
+		perror("Error (fork)");
+		exit(EXIT_FAILURE);
+	}
 
-    if (wpid == 0)
-    {
-        if (arguments[strlen(arguments) - 1] == '\n')
-            arguments[strlen(arguments) - 1] = '\0';
+	if (wpid == 0)
+	{
+		if (arguments[strlen(arguments) - 1] == '\n')
+			arguments[strlen(arguments) - 1] = '\0';
 
-        argv = split_string(arguments, " ");
-        execve(argv[0], argv, envp);
-        perror("Error (execve)");
-        free_string_array(argv);
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        wait(NULL);
-    }
+		argv = split_string(arguments, " ");
+		execve(argv[0], argv, envp);
+		perror("Error (execve)");
+		free_string_array(argv);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		wait(NULL);
+	}
 
-    exit(0);
+	exit(0);
 }
-
-
-
 
 /**
  * check_file_status - checks if the given file or command is executable.
@@ -131,7 +128,7 @@ void _execute(char *arguments, char **envp)
 */
 bool check_file_status(char *pathname)
 {
-    return access(pathname, X_OK) == 0;
+	return access(pathname, X_OK) == 0;
 }
 
 /**
@@ -145,35 +142,35 @@ bool check_file_status(char *pathname)
 */
 char **split_string(char *str, const char *delimiter)
 {
-    char **tokens = NULL;
-    char *token;
-    int size = 0;
+	char **tokens = NULL;
+	char *token;
+	int size = 0;
 
-    token = strtok(str, delimiter);
+	token = strtok(str, delimiter);
 
-    while (token != NULL)
-    {
-        tokens = realloc(tokens, sizeof(char *) * (size + 1));
-        if (!tokens)
-        {
-            _putchar('\n');
-            perror("Error (realloc)");
-            exit(EXIT_FAILURE);
-        }
+	while (token != NULL)
+	{
+		tokens = realloc(tokens, sizeof(char *) * (size + 1));
+		if (!tokens)
+		{
+			_putchar('\n');
+			perror("Error (realloc)");
+			exit(EXIT_FAILURE);
+		}
 
-        tokens[size++] = strdup(token);
-        token = strtok(NULL, delimiter);
-    }
+		tokens[size++] = strdup(token);
+		token = strtok(NULL, delimiter);
+	}
 
-    tokens = realloc(tokens, sizeof(char *) * (size + 1));
-    if (!tokens)
-    {
-        perror("Error (realloc)");
-        exit(EXIT_FAILURE);
-    }
-    tokens[size] = NULL;
+	tokens = realloc(tokens, sizeof(char *) * (size + 1));
+	if (!tokens)
+	{
+		perror("Error (realloc)");
+		exit(EXIT_FAILURE);
+	}
+	tokens[size] = NULL;
 
-    return (tokens);
+	return (tokens);
 }
 
 /**
@@ -183,15 +180,15 @@ char **split_string(char *str, const char *delimiter)
 */
 void free_string_array(char **arr)
 {
-    int i;
+	int i;
 
-    if (arr == NULL)
-        return;
+	if (arr == NULL)
+		return;
 
-    for (i = 0; arr[i] != NULL; i++)
-    {
-        free(arr[i]);
-    }
+	for (i = 0; arr[i] != NULL; i++)
+	{
+		free(arr[i]);
+	}
 
-    free(arr);
+	free(arr);
 }
