@@ -4,6 +4,6 @@
 */
 void builtin_exit(void)
 {
-	exit(2);
+	exit(0);
 }
 
